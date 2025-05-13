@@ -11,6 +11,15 @@
   margin: 3vh auto;
   /* padding: 1em; */
 
+
+}
+
+.search-container {
+    position: relative;
+
+
+}
+
   .search-bar {
 
     position: sticky;
@@ -44,7 +53,6 @@
       }
     }
   }
-}
 
 h1 {
   font-size: 2em;
@@ -214,7 +222,7 @@ iframe, video {
 }
 
 .close-button {
-  position: absolute;
+  position: fixed;
   top: 10px;
   right: 16px;
   font-size: 28px;

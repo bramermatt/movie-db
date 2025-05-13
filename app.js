@@ -17,6 +17,8 @@ async function searchMovie() {
   } else {
     resultsContainer.innerHTML = `<p>No movies found. Try another search.</p>`;
   }
+
+    document.getElementById('movieSearch').blur();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -134,9 +136,50 @@ function displayMovieDetails(movie) {
 }
 
 
-function showTrailer(title) {
-  const search = encodeURIComponent(`${title} trailer`);
-  const videoURL = `https://www.youtube.com/embed?autoplay=1&listType=search&list=${search}`;
+const YOUTUBE_API_KEY = 'AIzaSyDzy4FLG4XDHyW7JMa_sHb6NOJMAUoAnkY'; // Replace with your actual key
+
+async function showTrailer(title) {
+  const query = encodeURIComponent(`${title} trailer`);
+  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&type=video&key=${YOUTUBE_API_KEY}&maxResults=1`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!data.items || data.items.length === 0) {
+      alert('No trailer found.');
+      return;
+    }
+
+    const videoId = data.items[0].id.videoId;
+    const embedURL = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+
+    const modal = document.createElement('div');
+    modal.classList.add('modal');
+    modal.innerHTML = `
+      <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <div class="iframe-container">
+          <iframe src="${embedURL}" frameborder="0" allowfullscreen allow="autoplay"></iframe>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+  } catch (error) {
+    console.error('Error loading trailer:', error);
+    alert('Something went wrong loading the trailer.');
+  }
+}
+
+function closeModal() {
+  const modal = document.querySelector('.modal');
+  if (modal) modal.remove();
+}
+
+
+
+
   
   const modal = document.createElement('div');
   modal.classList.add('modal');
@@ -149,7 +192,7 @@ function showTrailer(title) {
     </div>
   `;
   document.body.appendChild(modal);
-}
+
 
 function closeModal() {
   const modal = document.querySelector('.modal');
