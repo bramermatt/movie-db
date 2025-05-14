@@ -198,3 +198,7 @@ function closeModal() {
   const modal = document.querySelector('.modal');
   if (modal) modal.remove();
 }
+
+    function clearSearchBox() {
+      document.getElementById('movieSearch').value = '';
+    }
